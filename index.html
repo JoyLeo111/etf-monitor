@@ -127,7 +127,7 @@ function rc(){cv=iv;document.getElementById('cd').textContent=cv+'s'}
 
 // 数据源: 本地服务 > allorigins > corsproxy
 const DS = [
-  async () => { var r = await fetch('/data.json'); if (!r.ok) throw Error('HTTP '+r.status); return r.json(); },
+  async () => { var r = await fetch('/etf-monitor/data.json'); if (!r.ok) throw Error('HTTP '+r.status); return r.json(); },
   async () => { var r = await fetch('/api/stocks'); if (!r.ok) throw Error('HTTP '+r.status); return r.json(); },
   async () => { var s=E.map(e=>e.market+'.'+e.code).join(','); var u='https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18,f20,f21&secids='+s; var r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(u),{headers:{'Accept':'application/json'}}); if(!r.ok) throw Error('HTTP '+r.status); return r.json(); },
   async () => { var s=E.map(e=>e.market+'.'+e.code).join(','); var u='https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18,f20,f21&secids='+s; var r=await fetch('https://corsproxy.io/?'+encodeURIComponent(u)); if(!r.ok) throw Error('HTTP '+r.status); return r.json(); },
