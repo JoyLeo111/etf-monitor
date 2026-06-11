@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>徐家乐的持仓今日行情</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0b0f1a;--card:#131926;--card-hover:#1a2235;--border:#1e2a45;--text:#e8edf5;--text2:#8892a8;--text3:#5a6478;--up:#e74c3c;--down:#27ae60;--up-bg:rgba(231,76,60,.1);--down-bg:rgba(39,174,96,.1);--accent:#3b82f6;--radius:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.header{background:linear-gradient(135deg,#0f1729,#1a2240);border-bottom:1px solid var(--border);padding:20px 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.h-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.h-l{display:flex;align-items:center;gap:16px}
+.logo{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.header h1{font-size:22px;font-weight:700;background:linear-gradient(90deg,#e8edf5,#8892a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.h-r{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--text2)}
+.sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;animation:pulse 2s infinite}
+.sdot.on{background:#27ae60;box-shadow:0 0 8px rgba(39,174,96,.5)}
+.sdot.off{background:#e74c3c;box-shadow:0 0 8px rgba(231,76,60,.5);animation:none}
+.sdot.load{background:#f39c12;box-shadow:0 0 8px rgba(243,156,18,.5)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.rbtn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:.2s}
+.rbtn:hover{background:var(--card-hover);border-color:var(--accent)}
+.rbtn:disabled{opacity:.5;cursor:not-allowed}
+.rbtn .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cd{font-variant-numeric:tabular-nums;min-width:60px;text-align:right}
+.main{max-width:1200px;margin:0 auto;padding:24px}
+.mt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);margin-bottom:20px;padding:10px 16px;background:var(--card);border-radius:8px;border:1px solid var(--border);flex-wrap:wrap}
+.mt .v{color:var(--text);font-weight:500}
+.mt .ms{margin-left:auto}
+.open{color:#27ae60;font-weight:600}
+.closed{color:#e74c3c;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:.3s}
+.card:hover{background:var(--card-hover);border-color:rgba(59,130,246,.3);transform:translateY(-2px);box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.cn{font-size:17px;font-weight:700}
+.cc{font-size:12px;color:var(--text3);margin-top:2px;font-family:'SF Mono','Consolas',monospace}
+.ctag{font-size:11px;padding:2px 10px;border-radius:4px;font-weight:600}
+.ctag.up{background:var(--up-bg);color:var(--up)}
+.ctag.dn{background:var(--down-bg);color:var(--down)}
+.ctag.fl{background:rgba(136,146,168,.15);color:var(--text2)}
+.cpa{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.cp{font-size:32px;font-weight:700;letter-spacing:-.5px;line-height:1.1;font-family:'SF Mono','Consolas',monospace}
+.cch{font-size:15px;font-weight:600;font-family:'SF Mono','Consolas',monospace}
+.cch.up,.cp.up{color:var(--up)}
+.cch.dn,.cp.dn{color:var(--down)}
+.cdet{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;padding-top:14px;border-top:1px solid var(--border)}
+.di{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.dl{color:var(--text3)}
+.dv{color:var(--text);font-weight:500;font-family:'SF Mono','Consolas',monospace}
+.dv.up{color:var(--up)}.dv.dn{color:var(--down)}
+.flash-up{animation:fU .6s ease}.flash-dn{animation:fD .6s ease}
+@keyframes fU{0%{color:var(--up)}100%{color:var(--text)}}
+@keyframes fD{0%{color:var(--down)}100%{color:var(--text)}}
+.loading{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text2)}
+.loading .sp{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+.err{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text2)}
+.foot{text-align:center;padding:24px;color:var(--text3);font-size:12px;border-top:1px solid var(--border);margin-top:32px}
+a{color:var(--accent);text-decoration:none}
+@media(max-width:768px){
+.header{padding:14px 16px}.header h1{font-size:17px}.h-r{gap:10px;font-size:12px}.rbtn{padding:6px 12px;font-size:12px}
+.main{padding:16px}.grid{grid-template-columns:1fr;gap:14px}.card{padding:16px}.cn{font-size:15px}.cp{font-size:26px}.cch{font-size:13px}}
+@media(max-width:480px){
+.h-in{flex-direction:column;align-items:stretch}.h-r{justify-content:space-between}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="h-in">
+<div class="h-l"><div class="logo">📊</div><h1>徐家乐的持仓今日行情</h1></div>
+<div class="h-r">
+<span><span class="sdot off" id="sdot"></span><span id="stxt">未连接</span></span>
+<span class="cd" id="cd">--s</span>
+<button class="rbtn" id="rbtn"><span id="rbspin"></span> 刷新</button>
+</div>
+</div>
+</header>
+<main class="main">
+<div class="mt">
+<span>🕐 更新时间：</span><span class="v" id="utime">--</span>
+<span class="ms" id="mstatus"></span>
+</div>
+<div class="grid" id="grid">
+<div class="loading"><div class="sp"></div><div>正在加载行情数据...</div></div>
+</div>
+</main>
+<footer class="foot">
+数据来源：东方财富 &bull; 行情延迟约15秒 &bull; 仅供个人参考，不构成投资建议
+</footer>
+<script>
+const E=[
+{code:'518880',market:'1',name:'华安黄金ETF'},
+{code:'517520',market:'1',name:'华安黄金股ETF'},
+{code:'510300',market:'1',name:'沪深300ETF'},
+{code:'513100',market:'1',name:'纳指100'},
+{code:'513500',market:'1',name:'标普500'},
+{code:'513180',market:'1',name:'恒生科技'},
+];
+let lp={},iv=10,cv=0,ct=null,ld=false,ok=null;
+
+const pf=(v,d=3)=>v===void 0?'--':parseFloat(v).toFixed(d);
+const fc=v=>{if(v===void 0)return'--';const n=parseFloat(v);return n>0?'+'+n.toFixed(2):n.toFixed(2)};
+const fp=v=>{if(v===void 0)return'--';const n=parseFloat(v);return n>0?'+'+n.toFixed(2)+'%':n.toFixed(2)+'%'};
+const fv=v=>{if(v===void 0)return'--';const n=parseFloat(v);return n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(2)+'万':n.toLocaleString()};
+
+function cs(){const d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Shanghai'}));const h=d.getHours(),m=d.getMinutes(),w=d.getDay();if(w===0||w===6)return{open:false,text:'周末休市'};const t=h*60+m;if((t>=555&&t<570)||(t>=570&&t<690)||(t>=780&&t<900))return{open:true,text:'交易中'};if(t>=900)return{open:false,text:'已收盘'};if(t<555)return{open:false,text:'未开盘'};if(t>=690&&t<780)return{open:false,text:'午间休市'};return{open:false,text:'非交易时间'}}
+
+function cr(et,d){
+const p=d?pf(d.f2):'--',ch=d?fc(d.f4):'--',cp_=d?fp(d.f3):'--',op=d?pf(d.f17):'--',hi=d?pf(d.f15):'--',lo=d?pf(d.f16):'--',pc=d?pf(d.f18):'--',vo=d?fv(d.f5):'--',am=d?fv(d.f6):'--';
+const cv=d?parseFloat(d.f4||0):0,u=cv>0,fl=cv===0||cv===void 0;
+const tc=fl?'fl':u?'up':'dn',tt=fl?'--':u?'上涨':'下跌';
+const dn=(d&&d.displayName)||et.name;
+let pfc='';const pv=lp[et.code];
+if(d&&pv!==void 0&&pv!==d.f2){pfc=parseFloat(d.f2)>parseFloat(pv)?'flash-up':'flash-dn'}
+if(d)lp[et.code]=d.f2;
+return '<div class="card"><div class="ch"><div><div class="cn">'+dn+'</div><div class="cc">'+et.code+'</div></div><span class="ctag '+tc+'">'+tt+'</span></div><div class="cpa"><span class="cp '+pfc+'">'+p+'</span><span class="cch '+tc+'">'+ch+' '+cp_+'</span></div><div class="cdet"><div class="di"><span class="dl">今开</span><span class="dv">'+op+'</span></div><div class="di"><span class="dl">昨收</span><span class="dv">'+pc+'</span></div><div class="di"><span class="dl">最高</span><span class="dv">'+hi+'</span></div><div class="di"><span class="dl">最低</span><span class="dv">'+lo+'</span></div><div class="di"><span class="dl">成交量</span><span class="dv">'+vo+'</span></div><div class="di"><span class="dl">成交额</span><span class="dv">'+am+'</span></div></div></div>';
+}
+
+function rn(a){const g=document.getElementById('grid');let h='';E.forEach(e=>{const d=a?a.find(x=>String(x.f12)===e.code):null;h+=cr(e,d)});g.innerHTML=h}
+function us(s,t){document.getElementById('sdot').className='sdot '+(s?'on':t==='加载中'?'load':'off');document.getElementById('stxt').textContent=t}
+function ut(t){document.getElementById('utime').textContent=t||'--';const s=cs();document.getElementById('mstatus').innerHTML=s.open?'<span class="open">● 交易中</span>':'<span class="closed">● '+s.text+'</span>'}
+
+function sc(){cv=iv;document.getElementById('cd').textContent=cv+'s';if(ct)clearInterval(ct);ct=setInterval(()=>{cv--;document.getElementById('cd').textContent=cv+'s';if(cv<=0)fd()},1000)}
+function rc(){cv=iv;document.getElementById('cd').textContent=cv+'s'}
+
+// 数据源: 本地服务 > allorigins > corsproxy
+const DS = [
+  // 方案1: Vercel API函数 (推荐)
+  async () => { const r = await fetch('/api/stocks'); if (!r.ok) throw Error('HTTP '+r.status); return r.json(); },
+  // 方案2: allorigins CORS代理
+  async () => { const s=E.map(e=>e.market==='sh'?'1.'+e.code:'0.'+e.code).join(','); const u='https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18,f20,f21&secids='+s; const r=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(u),{headers:{'Accept':'application/json'}}); if(!r.ok) throw Error('HTTP '+r.status); return r.json(); },
+  // 方案3: corsproxy.io
+  async () => { const s=E.map(e=>e.market==='sh'?'1.'+e.code:'0.'+e.code).join(','); const u='https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18,f20,f21&secids='+s; const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(u)); if(!r.ok) throw Error('HTTP '+r.status); return r.json(); },
+];
+
+async function ta() {
+  for(const s of DS) {
+    try {
+      const j = await s();
+      if(j?.data?.diff) return j;
+      if(j?.data && Array.isArray(j.data)) return { success: true, data: { diff: j.data } };
+    } catch(e) { /* try next source */ }
+  }
+  return null;
+}
+
+async function fd(){
+if(ld)return;ld=true;
+document.getElementById('rbspin').className='spinner';document.getElementById('rbtn').disabled=true;
+us(false,'加载中');
+try{
+const r=await ta();
+if(r&&r.data&&r.data.diff){
+const en=r.data.diff.map(i=>{const et=E.find(e=>e.code===String(i.f12));if(et)i.displayName=et.name;return i});
+ok=en;rn(en);
+ut(new Date().toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}));
+us(true,'已连接');
+}else throw Error('无数据');
+}catch(e){
+if(ok){rn(ok);us(false,'缓存数据')}else{rn(null);us(false,'连接失败')}
+document.getElementById('utime').textContent='失败: '+e.message;
+}finally{ld=false;document.getElementById('rbspin').className='';document.getElementById('rbtn').disabled=false;rc()}
+}
+
+document.getElementById('rbtn').onclick=()=>{if(ct)clearInterval(ct);fd()};
+document.addEventListener('DOMContentLoaded',()=>{fd();sc()});
+</script>
+</body>
+</html>
